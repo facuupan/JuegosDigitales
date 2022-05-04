@@ -1,8 +1,11 @@
 body {
-    color:aliceblue;
+    background: url(../asset/gradient\ background.svg) fixed center no-repeat;
+    background-size: cover;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}   
+}
+  
 
 .caratula {
     max-height: 75%;
 }
+

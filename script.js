@@ -50,11 +50,10 @@ juegos.push(
     "https://cracked-gamespc.com/storage/games_tumbl/resident-evil-6-cover-9qp.jpg"
   )
 );
+const sectionJuegos = document.getElementById("sectionJuegos");
+const cuerpoCarrito = document.getElementById("cuerpoCarrito");
+const footerCarrito = document.getElementById("footerCarrito");
 
-let section = document.querySelector(".sectionJuegos");
-
-const listaCarrito = document.getElementById("carrito");
-const ItemCarrito = document.getElementById("template");
 const carrito = {};
 // render listado de juegos
 for (const juego of juegos) {
@@ -65,40 +64,55 @@ for (const juego of juegos) {
     <img src="${juego.imagen}" class="img-thumbnail mw-25 caratula" alt="Imagen ${juego.nombre}">
     <div class="card-body d-flex justify-content-end flex-wrap align-content-center flex-column">
     <h5 class="card-title">${juego.nombre}</h5>
-    <p class="card-text">$${juego.precio}</p>
-    <button id="${juego.id}" type="button" class="btn btn-outline-danger btn-sm">Comprar</button>
+    <p class="card-text">${juego.precio}</p>
+    <button data-id="${juego.id}" type="button" class="btn btn-outline-danger btn-sm">Comprar</button>
     </div>
     </div>`;
-  section.appendChild(item);
-// enlace botones con información juego
-  const botonComprar = document.getElementById(juego.id);
 
-  botonComprar.addEventListener("click", function () {
-    const producto = {
-      id: juego.id,
-      nombre: juego.nombre,
-      precio: juego.precio,
-      cantidad: 1,
-    };
-    carrito[producto.nombre] = producto;
-
-    renderCarrito(producto);
-    swal.fire({
-      title: "Agregado al carrito correctamente",
-      icon: "success",
-      timer: 1000,
-    });
-    
-  });
+  sectionJuegos.appendChild(item);
 }
 
-const renderCarrito = (producto) => {
+sectionJuegos.addEventListener("click", (e) => {
+  agregarCarrito(e);
+});
+
+const agregarCarrito = (e) => {
+  if (e.target.classList.contains("btn-outline-danger")) {
+    pushCarrito(e.target.parentElement);
+  }
+  e.stopPropagation();
+};
+
+const pushCarrito = (objeto) => {
+  const producto = {
+    id: objeto.querySelector(".btn-outline-danger").dataset.id,
+    nombre: objeto.querySelector(".card-title").textContent,
+    precio: objeto.querySelector(".card-text").textContent,
+    cantidad: 1,
+  };
+  if (carrito.hasOwnProperty(producto.id)) {
+    producto.cantidad = carrito[producto.id].cantidad + 1;
+  }
+  carrito[producto.id] = { ...producto };
+
+  renderCarrito();
+  swal.fire({
+    title: "Agregado al carrito correctamente",
+    icon: "success",
+    timer: 1000,
+  });
+};
+
+const renderCarrito = () => {
+  console.log(carrito);
   
-    let item = document.createElement("UL");
-    item.innerHTML = `<li class="list-group-item d-flex justify-content-between align-items-center">
-        <span class="nombre">${producto.nombre}</span>
-        <span class="precio">${producto.precio}</span>
-        <span class="cantidad bg-danger rounded-pill badge" id="">${producto.cantidad}</span>
-      </li>`;
-    listaCarrito.appendChild(item);
+  cuerpoCarrito.innerHTML = '';
+  Object.values(carrito).forEach((producto) => {
+    let row = document.createElement("TR");
+    row.innerHTML = `<th scope="row">${producto.id}</th>
+    <th scope="row">${producto.nombre}</th>
+    <th scope="row">${producto.cantidad}</th>
+    <th scope="row">${producto.cantidad * parseInt(producto.precio)}</th>`;
+    cuerpoCarrito.appendChild(row);
+  });
 };
