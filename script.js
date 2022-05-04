@@ -1,3 +1,4 @@
+// constructor de juegos
 class Juego {
   constructor(id, nombre, publisher, año, precio, imagenUrl) {
     this.id = id;
@@ -53,8 +54,9 @@ juegos.push(
 const sectionJuegos = document.getElementById("sectionJuegos");
 const cuerpoCarrito = document.getElementById("cuerpoCarrito");
 const footerCarrito = document.getElementById("footerCarrito");
-
 const carrito = {};
+// api mercadopago
+
 // render listado de juegos
 for (const juego of juegos) {
   let item = document.createElement("div");
@@ -71,18 +73,18 @@ for (const juego of juegos) {
 
   sectionJuegos.appendChild(item);
 }
-
+// evento que detecta botones de compra
 sectionJuegos.addEventListener("click", (e) => {
   agregarCarrito(e);
 });
-
+// verificador de que sea un boton de compra y empuja producto al carrito
 const agregarCarrito = (e) => {
   if (e.target.classList.contains("btn-outline-danger")) {
     pushCarrito(e.target.parentElement);
   }
   e.stopPropagation();
 };
-
+// constructor de producto para items de carrito
 const pushCarrito = (objeto) => {
   const producto = {
     id: objeto.querySelector(".btn-outline-danger").dataset.id,
@@ -94,19 +96,18 @@ const pushCarrito = (objeto) => {
     producto.cantidad = carrito[producto.id].cantidad + 1;
   }
   carrito[producto.id] = { ...producto };
-
-  renderCarrito();
   swal.fire({
     title: "Agregado al carrito correctamente",
     icon: "success",
     timer: 1000,
   });
+  renderCarrito();
 };
-
+// constructor de cada item del carrito
 const renderCarrito = () => {
   console.log(carrito);
-  
-  cuerpoCarrito.innerHTML = '';
+
+  cuerpoCarrito.innerHTML = "";
   Object.values(carrito).forEach((producto) => {
     let row = document.createElement("TR");
     row.innerHTML = `<th scope="row">${producto.id}</th>
@@ -116,3 +117,7 @@ const renderCarrito = () => {
     cuerpoCarrito.appendChild(row);
   });
 };
+
+fetch("https://api.mercadopago.com")
+  .then((response) => response.json())
+  .then((json) => console.log(json));
