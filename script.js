@@ -9,7 +9,7 @@ class Juego {
     this.imagen = imagenUrl;
   }
 }
-
+// Juegos entrada manual
 const juegos = [];
 juegos.push(
   new Juego(
@@ -51,20 +51,20 @@ juegos.push(
     "https://cracked-gamespc.com/storage/games_tumbl/resident-evil-6-cover-9qp.jpg"
   )
 );
+// Capturando elementos de html
 const sectionJuegos = document.getElementById("sectionJuegos");
 const cuerpoCarrito = document.getElementById("cuerpoCarrito");
 const footerCarrito = document.getElementById("footerCarrito");
+
 const carrito = {};
 
-
-
-// render listado de juegos
+// render catalogo de juegos
 for (const juego of juegos) {
   let item = document.createElement("div");
   item.classList.add("d-flex", "w-25", "justify-content-center");
   item.innerHTML = `<div class="card w-75 d-inline-flex
     align-items-center text-center ">
-    <img src="${juego.imagen}" class="img-thumbnail mw-25 caratula" alt="Imagen ${juego.nombre}">
+    <img src="${juego.imagen}" class="img-thumbnail mw-25 caratula" alt="Caratula ${juego.nombre}">
     <div class="card-body d-flex justify-content-end flex-wrap align-content-center flex-column">
     <h5 class="card-title">${juego.nombre}</h5>
     <p class="card-text">${juego.precio}</p>
@@ -74,25 +74,28 @@ for (const juego of juegos) {
 
   sectionJuegos.appendChild(item);
 }
-// evento que detecta botones de compra
+// evento que detecta boton
 sectionJuegos.addEventListener("click", (e) => {
   agregarCarrito(e);
 });
 // verificador de que sea un boton de compra y empuja producto al carrito
 const agregarCarrito = (e) => {
   if (e.target.classList.contains("btn-outline-danger")) {
-    pushCarrito(e.target.parentElement);
+    
+    crearProducto(e.target.parentElement);
   }
   e.stopPropagation();
 };
 // constructor de producto para items de carrito
-const pushCarrito = (objeto) => {
+const crearProducto = (objeto) => {
   const producto = {
     id: objeto.querySelector(".btn-outline-danger").dataset.id,
     nombre: objeto.querySelector(".card-title").textContent,
     precio: objeto.querySelector(".card-text").textContent,
+    imagen: objeto.imagen,
     cantidad: 1,
   };
+  // Verificador de existencia de producto en el carrito, en caso de que exista suma 1 a la cantidad
   if (carrito.hasOwnProperty(producto.id)) {
     producto.cantidad = carrito[producto.id].cantidad + 1;
   }
@@ -104,7 +107,7 @@ const pushCarrito = (objeto) => {
   });
   renderCarrito();
 };
-// constructor de cada item del carrito
+// Render del carrito cada vez que se agrega un producto
 const renderCarrito = () => {
   cuerpoCarrito.innerHTML = "";
   Object.values(carrito).forEach((producto) => {
@@ -117,26 +120,28 @@ const renderCarrito = () => {
   });
   renderCarritoFooter();
 };
-
+// Render de cantidad y precio total 
 const renderCarritoFooter = () => {
-  footerCarrito.innerHTML = ''
-  if(Object.keys(carrito).length === 0) {
-    footerCarrito.innerHTML = `<th scope="row" colspan="5">Carrito vacío</th>`
+  footerCarrito.innerHTML = "";
+  if (Object.keys(carrito).length === 0) {
+    footerCarrito.innerHTML = `<th scope="row" colspan="5">Carrito vacío</th>`;
   }
+  // tomo todos los valores de cantidad dentro del carrito y los suma con reduce
+  const footerCantidad = Object.values(carrito).reduce(
+    (acc, { cantidad }) => acc + cantidad,
+    0
+  );
+  // tomo los valores de cantidad y precio de cada elemento y los multiplico con reduce
+  const footerPrecio = Object.values(carrito).reduce(
+    (acc, { cantidad, precio }) => acc + cantidad * precio,
+    0
+  );
 
-  const footerCantidad = Object.values(carrito).reduce((acc, {cantidad}) => acc + cantidad, 0)
-
-  const footerPrecio = Object.values(carrito).reduce((acc, {cantidad,precio}) => acc + cantidad * precio, 0)
-  
-  footerCarrito.innerHTML = `<th scope="row">Cantidad total</th>
-  <th></th>
-  <th scope="row">${footerCantidad}</th>
-  <th scope="row">${footerPrecio}</th>`
-}
-
-
-
+  footerCarrito.innerHTML = `<th></th>
+  <th scope="row"></th>
+  <th scope="row">Cantidad total:   ${footerCantidad}</th>
+  <th scope="row">${footerPrecio}</th>`;
+};
 
 // api mercadopago
-fetch("https://api.mercadopago.com")
-  
+fetch("https://api.mercadopago.com");
