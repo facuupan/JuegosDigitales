@@ -55,7 +55,8 @@ const sectionJuegos = document.getElementById("sectionJuegos");
 const cuerpoCarrito = document.getElementById("cuerpoCarrito");
 const footerCarrito = document.getElementById("footerCarrito");
 const carrito = {};
-// api mercadopago
+
+
 
 // render listado de juegos
 for (const juego of juegos) {
@@ -105,8 +106,6 @@ const pushCarrito = (objeto) => {
 };
 // constructor de cada item del carrito
 const renderCarrito = () => {
-  console.log(carrito);
-
   cuerpoCarrito.innerHTML = "";
   Object.values(carrito).forEach((producto) => {
     let row = document.createElement("TR");
@@ -116,8 +115,28 @@ const renderCarrito = () => {
     <th scope="row">${producto.cantidad * parseInt(producto.precio)}</th>`;
     cuerpoCarrito.appendChild(row);
   });
+  renderCarritoFooter();
 };
 
+const renderCarritoFooter = () => {
+  footerCarrito.innerHTML = ''
+  if(Object.keys(carrito).length === 0) {
+    footerCarrito.innerHTML = `<th scope="row" colspan="5">Carrito vacío</th>`
+  }
+
+  const footerCantidad = Object.values(carrito).reduce((acc, {cantidad}) => acc + cantidad, 0)
+
+  const footerPrecio = Object.values(carrito).reduce((acc, {cantidad,precio}) => acc + cantidad * precio, 0)
+  
+  footerCarrito.innerHTML = `<th scope="row">Cantidad total</th>
+  <th></th>
+  <th scope="row">${footerCantidad}</th>
+  <th scope="row">${footerPrecio}</th>`
+}
+
+
+
+
+// api mercadopago
 fetch("https://api.mercadopago.com")
-  .then((response) => response.json())
-  .then((json) => console.log(json));
+  
