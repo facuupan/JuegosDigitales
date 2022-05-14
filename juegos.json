@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "nombre": "The Sims 4",
+    "publisher": "Maxis",
+    "año": "2017",
+    "precio": 500,
+    "imagen": "https://sm.ign.com/ign_es/game/l/los-sims-4/los-sims-4_c8f4.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "God of War",
+    "publisher": "Santa Monica Studio",
+    "año": "2022",
+    "precio": 2500,
+    "imagen": "https://cdn1.epicgames.com/offer/3ddd6a590da64e3686042d108968a6b2/EGS_GodofWar_SantaMonicaStudio_S2_1200x1600-fbdf3cbc2980749091d52751ffabb7b7_1200x1600-fbdf3cbc2980749091d52751ffabb7b7"
+  },
+  {
+    "id": 3,
+    "nombre": "Ghostwire",
+    "publisher": "Bethesda",
+    "año": "2022",
+    "precio": 3500,
+    "imagen": "https://as01.epimg.net/meristation/imagenes/2022/03/21/game_cover/614163601647871882.jpg"
+  },
+  {
+    "id": 4,
+    "nombre": "Resident Evil 6",
+    "publisher": "Capcom",
+    "año": "2013",
+    "precio": 500,
+    "imagen": "https://cracked-gamespc.com/storage/games_tumbl/resident-evil-6-cover-9qp.jpg"
+  }
+]
