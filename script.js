@@ -85,27 +85,58 @@ const renderCarrito = () => {
   });
   renderCarritoFooter();
 };
+
+
+// operacion cantidad total de juegos en el carrito
+function footerCantidad() {
+  let resolve = Object.values(carrito).reduce(
+  (acc, { cantidad }) => acc + cantidad,  0)
+  return resolve
+}
+// operacion de precio final con reduce
+function footerPrecio() {
+  let resolve = Object.values(carrito).reduce(
+  (acc, { cantidad, precio }) => acc + cantidad * precio,
+  0)
+  return resolve
+}
 // Render de cantidad y precio total
 function renderCarritoFooter() {
   footerCarrito.innerHTML = "";
   if (Object.keys(carrito).length === 0) {
     footerCarrito.innerHTML = `<th scope="row" colspan="5">Carrito vacío</th>`;
   }
-  // operacion cantidad total de juegos en el carrito
-  const footerCantidad = Object.values(carrito).reduce(
-    (acc, { cantidad }) => acc + cantidad,
-    0
-  );
-  // operacion de precio final con reduce
-  const footerPrecio = Object.values(carrito).reduce(
-    (acc, { cantidad, precio }) => acc + cantidad * precio,
-    0
-  );
 
+
+  
   footerCarrito.innerHTML = `<th></th>
   <th scope="row"></th>
-  <th scope="row">Cantidad total:   ${footerCantidad}</th>
-  <th scope="row">Precio Final: ${footerPrecio} $  <br>
+  <th scope="row">Cantidad total:   ${footerCantidad()}</th>
+  <th scope="row">Precio Final: ${footerPrecio()} $  <br>
   <button id="finalizar-compra" type="button" class="btn btn-outline-primary btn-sm">Finalizar compra</button></th>
   `;
 }
+
+footerCarrito.addEventListener("click", (e) => {
+  finalizarCompra(e)
+})
+
+function finalizarCompra(e) {
+    if (e.target.classList.contains("btn-outline-primary")) {
+      Swal.fire({
+        title: '<strong><u>Confirmar carrito</u></strong>',
+        icon: 'info',
+        html:
+        `Cantidad de articulos: ${footerCantidad()}<br>
+        Precio Final: ${footerPrecio()} $`,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText:
+          '<i class="fa fa-thumbs-up"></i> Pagar',
+        cancelButtonText:
+          '<i class="fa fa-thumbs-down">Cancelar</i>',
+      })
+    }
+    e.stopPropagation();
+  }
